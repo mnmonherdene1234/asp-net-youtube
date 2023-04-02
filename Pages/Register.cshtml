@@ -1,0 +1,26 @@
+@page
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model AspNetYoutube.Pages.RegisterModel
+
+<!DOCTYPE HTML>
+<head>
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/register.css">
+    <script src="/js/register.js" defer></script>
+</head>
+<div class="container">
+    <h1>Register</h1>
+    <form method="post" id="form" class="form">
+        <div class="controller-group">
+            <label for="email-input">Email:</label>
+            <br>
+            <input class="input" id="email-input" name="email" type="email" placeholder="mn@gmail.com" required />
+        </div>
+        <div class="controller-group">
+            <label for="password-input">Password:</label>
+            <br>
+            <input class="input" id="password-input" name="password" type="password" placeholder="********" required />
+        </div>
+        <button class="btn" type="submit">Sign Up</button>
+    </form>
+</div>
