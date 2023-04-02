@@ -4,8 +4,8 @@
 
 <!DOCTYPE HTML>
 <head>
-    <link rel="stylesheet" href="/css/common.css">
-    <link rel="stylesheet" href="/css/login.css">
+    <link rel="stylesheet" href="/css/common.css" asp-append-version="true">
+    <link rel="stylesheet" href="/css/login.css" asp-append-version="true">
     <script src="/js/login.js" defer></script>
 </head>
 <div class="container">
@@ -21,6 +21,9 @@
             <br>
             <input class="input" id="password-input" name="password" type="password" placeholder="********" required />
         </div>
-        <button class="btn" type="submit">Sign In</button>
+        <button class="btn btn-primary" type="submit">Sign In</button>
+        <a href="/Register" style="text-align:center;text-decoration: none;">
+            Register
+        </a>
     </form>
 </div>

@@ -7,9 +7,24 @@
   outline: none;
 }
 
+h1 {
+  margin: 0;
+  padding: 0;
+}
+
 ::selection {
   background-color: var(--primary-color);
   color: white;
+}
+
+/* Change the color of the scrollbar track */
+::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+}
+
+/* Change the color of the scrollbar thumb */
+::-webkit-scrollbar-thumb {
+  background-color: var(--primary-color);
 }
 
 .input {
@@ -33,10 +48,17 @@
   padding: 0.5rem;
   border-radius: 5px;
   border: none;
-  background-color: var(--primary-color);
-  color: white;
+  color: black;
+  background-color: rgb(232, 232, 232);
   transition: all 0.3s ease-in-out;
   cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: white;
 }
 
 .btn:hover {

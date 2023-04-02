@@ -1,0 +1,18 @@
+.container{
+  width: 960px;
+  margin: auto;
+  padding: 1rem;
+}
+
+nav{
+  display: flex;
+  justify-content: space-between;
+}
+
+main {
+  min-height: 100svh;
+}
+
+footer{
+  text-align: center;
+}
