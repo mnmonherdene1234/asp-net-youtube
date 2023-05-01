@@ -1,0 +1,35 @@
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<!DOCTYPE HTML>
+<html>
+    <head>
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="/css/common.css" asp-append-version="true">
+    <link rel="stylesheet" href="/css/index.css" asp-append-version="true">
+    <script src="/js/index.js" defer asp-append-version="true"></script>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <nav>
+                    <div class="logo-and-text" >
+                        <a href="/">
+                            <img src="/images/logo.png" alt="LOGO" height="48">
+                        </a>
+                        MeTube
+                    </div>
+                    <div>
+                        <a href="/Upload" class="btn btn-primary">Нэмэх</a>
+                        <button id="logout-button" class="btn">Гарах</button>
+                    </div>
+                </nav>
+            </header>
+            <main class="container">
+                @RenderBody()
+            </main>
+            <footer>
+                <p>&copy; 2023 Mn Monherdene | All rights reserved </p>
+            </footer>
+        </div>
+    </body>
+</html>

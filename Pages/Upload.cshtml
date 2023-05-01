@@ -1,0 +1,19 @@
+@page
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model AspNetYoutube.Pages.UploadModel
+@{
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+<h1>Шинэ бичлэг илгээх</h1>
+<br>
+<div>
+    <span>Гарчиг: </span>
+    <input id="title-input" class="search-box" />
+</div>
+<br>
+<video id="selected-video" height="200"></video>
+<p id="selected-video-info"></p>
+<button id="select-button" class="btn">Сонгох</button>
+<button id="upload-button" class="btn btn-primary">Илгээх</button>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.0/dist/sweetalert2.all.min.js"></script>
+<script src="~/js/upload.js" asp-append-version="true"></script>

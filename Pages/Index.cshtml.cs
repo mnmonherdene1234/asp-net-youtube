@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System.Security.Claims;
 using AspNetYoutube.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AspNetCore.Pages;
 
+[Authorize]
 public class IndexModel : PageModel
 {
     public UserManager<User> UserManager { get; set; }

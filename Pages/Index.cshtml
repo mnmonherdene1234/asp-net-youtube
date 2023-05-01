@@ -1,28 +1,11 @@
 @page
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @model AspNetCore.Pages.IndexModel
+@{
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
 
-<!DOCTYPE HTML>
-<head>
-    <link rel="stylesheet" href="/css/common.css" asp-append-version="true">
-    <link rel="stylesheet" href="/css/index.css" asp-append-version="true">
-    <script src="/js/index.js" defer asp-append-version="true"></script>
-</head>
-<div class="container">
-    <header>
-        <nav>
-            <div id="user-email"></div>
-            <button id="logout-button" class="btn">Logout</button>
-            <div id="login-register-container">
-                <a href="/Login"><button>Login</button></a>
-                <a href="/Register"><button>Register</button></a>
-            </div>
-        </nav>
-    </header>
-    <main>
-
-    </main>
-    <footer>
-        <p>&copy; 2023 Mn Monherdene | All rights reserved </p>
-    </footer>
+<div class="search-container">
+    <input class="search-box" placeholder="Programming Tutorial" />
+    <button class="btn btn-primary">Хайх</button>
 </div>
