@@ -8,4 +8,5 @@ public class Video : BaseEntity
     public string? Url { get; set; }
     public Guid UserId { get; set; }
     public User? User { get; set; }
+    public ICollection<Comment>? Comments { get; set; }
 }

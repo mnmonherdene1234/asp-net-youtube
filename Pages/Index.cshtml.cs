@@ -13,9 +13,11 @@ public class IndexModel : PageModel
 {
     public UserManager<User> UserManager { get; set; }
     public SignInManager<User> SignInManager { get; set; }
+    public DatabaseContext DatabaseContext { get; set; }
 
-    public IndexModel(UserManager<User> userManager, SignInManager<User> signInManager)
+    public IndexModel(DatabaseContext databaseContext, UserManager<User> userManager, SignInManager<User> signInManager)
     {
+        DatabaseContext = databaseContext;
         UserManager = userManager;
         SignInManager = signInManager;
     }
@@ -47,5 +49,19 @@ public class IndexModel : PageModel
         {
             message = "OK"
         });
+    }
+
+    public async Task<IActionResult> OnGetVideos()
+    {
+        string q = Convert.ToString(Request.Query["q"]);
+
+        var videos = DatabaseContext.Videos.Where(v => v.Title.ToUpper().Contains((q ?? "").ToUpper())).ToList();
+
+        foreach (var video in videos)
+        {
+            video.User = await DatabaseContext.Users.FindAsync(video.UserId.ToString());
+        }
+
+        return new JsonResult(videos);
     }
 }
