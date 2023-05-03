@@ -14,7 +14,7 @@ public class DatabaseContext : IdentityDbContext<User>
 
     public override int SaveChanges()
     {
-        var now = DateTime.UtcNow;
+        var now = DateTime.Now;
 
         foreach (var entry in ChangeTracker.Entries())
         {

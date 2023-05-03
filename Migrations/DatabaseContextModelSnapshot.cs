@@ -34,10 +34,7 @@ namespace AspNetYoutube.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("UserId1")
+                    b.Property<string>("UserId")
                         .HasColumnType("varchar(255)");
 
                     b.Property<Guid>("VideoId")
@@ -45,7 +42,7 @@ namespace AspNetYoutube.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.HasIndex("VideoId");
 
@@ -134,15 +131,12 @@ namespace AspNetYoutube.Migrations
                     b.Property<string>("Url")
                         .HasColumnType("longtext");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("UserId1")
+                    b.Property<string>("UserId")
                         .HasColumnType("varchar(255)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Videos");
                 });
@@ -279,10 +273,10 @@ namespace AspNetYoutube.Migrations
                 {
                     b.HasOne("AspNetYoutube.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId");
 
                     b.HasOne("AspNetYoutube.Models.Video", "Video")
-                        .WithMany("Comments")
+                        .WithMany()
                         .HasForeignKey("VideoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -295,8 +289,8 @@ namespace AspNetYoutube.Migrations
             modelBuilder.Entity("AspNetYoutube.Models.Video", b =>
                 {
                     b.HasOne("AspNetYoutube.Models.User", "User")
-                        .WithMany("Videos")
-                        .HasForeignKey("UserId1");
+                        .WithMany()
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
@@ -350,16 +344,6 @@ namespace AspNetYoutube.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("AspNetYoutube.Models.User", b =>
-                {
-                    b.Navigation("Videos");
-                });
-
-            modelBuilder.Entity("AspNetYoutube.Models.Video", b =>
-                {
-                    b.Navigation("Comments");
                 });
 #pragma warning restore 612, 618
         }

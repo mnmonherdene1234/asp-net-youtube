@@ -4,10 +4,13 @@ const loginRegisterContainer = document.getElementById(
 );
 const searchInput = document.getElementById("search-input");
 const videosContainer = document.getElementById("videos-container");
-videosContainer.style.display = "flex";
-videosContainer.style.flexWrap = "wrap";
-videosContainer.style.gap = "1rem";
-videosContainer.style.padding = "1rem 0";
+
+if (videosContainer) {
+  videosContainer.style.display = "flex";
+  videosContainer.style.flexWrap = "wrap";
+  videosContainer.style.gap = "1rem";
+  videosContainer.style.padding = "1rem 0";
+}
 
 const videoCard = (id, title, url) => {
   const container = document.createElement("a");

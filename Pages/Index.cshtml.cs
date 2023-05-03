@@ -55,12 +55,17 @@ public class IndexModel : PageModel
     {
         string q = Convert.ToString(Request.Query["q"]);
 
-        var videos = DatabaseContext.Videos.Where(v => v.Title.ToUpper().Contains((q ?? "").ToUpper())).ToList();
+        await Task.Delay(0);
 
-        foreach (var video in videos)
+        if (DatabaseContext.Videos == null)
         {
-            video.User = await DatabaseContext.Users.FindAsync(video.UserId.ToString());
+            return new JsonResult(new
+            {
+                message = "VIDEOS_NOT_FOUND"
+            });
         }
+
+        var videos = DatabaseContext.Videos.Where(v => v.Title != null ? v.Title.ToUpper().Contains((q ?? "").ToUpper()) : false).ToList();
 
         return new JsonResult(videos);
     }

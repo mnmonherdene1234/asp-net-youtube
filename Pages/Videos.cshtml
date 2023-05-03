@@ -4,7 +4,16 @@
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 
+<video id="video" controls autoplay></video>
 <h1 id="title"></h1>
-<video id="video"></video>
+<p id="username"></p>
 
-<script src="~/js/video.js"></script>
+<hr>
+<div id="comments"></div>
+<div id="comment-container">
+    <input id="comment" />
+    <div id="send-button">&raquo;</div>
+</div>
+
+<script src="~/js/video.js" asp-append-version="true">
+</script>

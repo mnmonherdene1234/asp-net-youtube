@@ -37,8 +37,7 @@ uploadButton.addEventListener("click", () => {
       const xhr = new XMLHttpRequest();
 
       xhr.onload = () => {
-        const response = JSON.parse(xhr.response);
-        console.log(response);
+        location.href = "/";
       };
 
       xhr.open("POST", `/Upload?handler=AddVideo`);

@@ -23,7 +23,17 @@ public class UploadModel : PageModel
 
     public async Task<IActionResult> OnPostAddVideo(string title, IFormFile video)
     {
-        var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+        var userValue = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (userValue == null)
+        {
+            return new JsonResult(new
+            {
+                message = "USER_VALUE_NOT_FOUND"
+            });
+        }
+
+        var userId = Guid.Parse(userValue);
 
         var filePath = Path.Combine(WebHostEnvironment.WebRootPath, "videos", video.FileName);
 
@@ -32,11 +42,21 @@ public class UploadModel : PageModel
             await video.CopyToAsync(stream);
         }
 
+        var user = await DatabaseContext.Users.FindAsync(userId.ToString());
+
+        if (user == null)
+        {
+            return new JsonResult(new
+            {
+                message = "USER_NOT_FOUND"
+            });
+        }
+
         Video vid = new()
         {
-            UserId = userId,
             Title = title,
-            Url = $"/videos/{video.FileName}"
+            Url = $"/videos/{video.FileName}",
+            UserId = user.Id,
         };
 
         if (DatabaseContext.Videos != null)
