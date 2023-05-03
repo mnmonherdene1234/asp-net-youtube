@@ -1,0 +1,32 @@
+.container {
+  width: 960px;
+  margin: auto;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+@media (max-width: 960px) {
+  .container {
+    width: 100%;
+    padding: 0.5rem;
+  }
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+main {
+  min-height: 100svh;
+}
+
+footer {
+  text-align: center;
+}
+
+.logo-and-text {
+  display: flex;
+  align-items: center;
+}
