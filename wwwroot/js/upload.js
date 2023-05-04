@@ -7,6 +7,7 @@ const selectedVideoInfo = document.getElementById("selected-video-info");
 selectedVideo.style.display = "none";
 const uploadButton = document.getElementById("upload-button");
 const titleInput = document.getElementById("title-input");
+let fileSizeInMB = 0;
 
 selectButton.addEventListener("click", () => {
   fileInput.click();
@@ -15,11 +16,12 @@ selectButton.addEventListener("click", () => {
 fileInput.addEventListener("change", (event) => {
   const [file] = event.target.files;
   if (file) {
-    selectedVideoInfo.innerHTML = `Нэр: ${file.name} Хэмжээ: ${(
-      file.size /
-      1024 /
-      1024
-    ).toPrecision(2)}MB`;
+    const fileSizeInBytes = file.size;
+    fileSizeInMB = fileSizeInBytes / (1024 * 1024);
+
+    selectedVideoInfo.innerHTML = `Нэр: ${
+      file.name
+    } Хэмжээ: ${fileSizeInMB.toPrecision(2)}MB`;
     const videoUrl = URL.createObjectURL(file);
     selectedVideo.src = videoUrl;
     selectedVideo.style.display = "block";
@@ -34,20 +36,29 @@ uploadButton.addEventListener("click", () => {
 
   if (file) {
     if (titleInput.value) {
-      const xhr = new XMLHttpRequest();
+      if (fileSizeInMB < 100) {
+        const xhr = new XMLHttpRequest();
 
-      xhr.onload = () => {
-        location.href = "/";
-      };
+        xhr.onload = () => {
+          location.href = "/";
+        };
 
-      xhr.open("POST", `/Upload?handler=AddVideo`);
+        xhr.open("POST", `/Upload?handler=AddVideo`);
 
-      const formData = new FormData();
+        const formData = new FormData();
 
-      formData.append("title", titleInput.value);
-      formData.append("video", file);
+        formData.append("title", titleInput.value);
+        formData.append("video", file);
 
-      xhr.send(formData);
+        xhr.send(formData);
+      } else {
+        Swal.fire({
+          title: "Алдаа",
+          text: "100MB бага байна",
+          icon: "error",
+          confirmButtonText: "За",
+        });
+      }
     } else {
       Swal.fire({
         title: "Алдаа",
