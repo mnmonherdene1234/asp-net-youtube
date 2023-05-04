@@ -7,6 +7,7 @@ const selectedVideoInfo = document.getElementById("selected-video-info");
 selectedVideo.style.display = "none";
 const uploadButton = document.getElementById("upload-button");
 const titleInput = document.getElementById("title-input");
+const youtubeInput = document.getElementById("youtube-input");
 let fileSizeInMB = 0;
 
 selectButton.addEventListener("click", () => {
@@ -33,8 +34,9 @@ fileInput.addEventListener("change", (event) => {
 
 uploadButton.addEventListener("click", () => {
   const [file] = fileInput.files;
+  const youtubeUrl = youtubeInput.value;
 
-  if (file) {
+  if (file || youtubeUrl) {
     if (titleInput.value) {
       if (fileSizeInMB < 100) {
         const xhr = new XMLHttpRequest();
@@ -49,6 +51,7 @@ uploadButton.addEventListener("click", () => {
 
         formData.append("title", titleInput.value);
         formData.append("video", file);
+        formData.append("youtubeUrl", youtubeUrl);
 
         xhr.send(formData);
       } else {

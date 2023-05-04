@@ -12,7 +12,17 @@ if (videosContainer) {
   videosContainer.style.padding = "1rem 0";
 }
 
-const videoCard = (id, title, url) => {
+function getYouTubeId(url) {
+  var regExp = /^.*(?:youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=)([^#\&\?]*).*/;
+  var match = url.match(regExp);
+  if (match && match[1]) {
+    return match[1];
+  } else {
+    return null;
+  }
+}
+
+const videoCard = (id, title, url, youtubeUrl) => {
   const container = document.createElement("a");
   container.href = `Videos?id=${id}`;
   container.style.width = "200px";
@@ -21,10 +31,19 @@ const videoCard = (id, title, url) => {
   container.style.overflow = "hidden";
   container.style.textDecoration = "none";
 
-  const video = document.createElement("video");
-  video.src = url;
-  video.style.width = "200px";
-  container.append(video);
+  if (youtubeUrl) {
+    const iframe = document.createElement("iframe");
+    iframe.src = `https://www.youtube.com/embed/${getYouTubeId(youtubeUrl)}`;
+    iframe.width = "200";
+    iframe.height = "112";
+    iframe.frameBorder = 0;
+    container.append(iframe);
+  } else {
+    const video = document.createElement("video");
+    video.src = url;
+    video.style.width = "200px";
+    container.append(video);
+  }
 
   const pTitle = document.createElement("p");
   pTitle.style.textAlign = "center";
@@ -57,7 +76,9 @@ const getVideos = (q) => {
     videosContainer.innerHTML = "";
 
     for (const video of response) {
-      videosContainer.append(videoCard(video?.id, video?.title, video?.url));
+      videosContainer.append(
+        videoCard(video?.id, video?.title, video?.url, video?.youtubeUrl)
+      );
     }
   };
 

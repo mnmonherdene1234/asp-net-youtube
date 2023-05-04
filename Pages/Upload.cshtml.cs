@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using AspNetYoutube.Models;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AspNetYoutube.Pages;
 
+[Authorize]
 [IgnoreAntiforgeryToken]
 public class UploadModel : PageModel
 {
@@ -21,7 +23,7 @@ public class UploadModel : PageModel
 
     public void OnGet() { }
 
-    public async Task<IActionResult> OnPostAddVideo(string title, IFormFile video)
+    public async Task<IActionResult> OnPostAddVideo(string title, IFormFile? video, string? youtubeUrl)
     {
         var userValue = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
@@ -35,11 +37,14 @@ public class UploadModel : PageModel
 
         var userId = Guid.Parse(userValue);
 
-        var filePath = Path.Combine(WebHostEnvironment.WebRootPath, "videos", video.FileName);
-
-        using (var stream = new FileStream(filePath, FileMode.Create))
+        if (video != null)
         {
-            await video.CopyToAsync(stream);
+            var filePath = Path.Combine(WebHostEnvironment.WebRootPath, "videos", video.FileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await video.CopyToAsync(stream);
+            }
         }
 
         var user = await DatabaseContext.Users.FindAsync(userId.ToString());
@@ -55,8 +60,9 @@ public class UploadModel : PageModel
         Video vid = new()
         {
             Title = title,
-            Url = $"/videos/{video.FileName}",
+            Url = video != null ? $"/videos/{video.FileName}" : null,
             UserId = user.Id,
+            YoutubeUrl = youtubeUrl
         };
 
         if (DatabaseContext.Videos != null)

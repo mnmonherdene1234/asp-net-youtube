@@ -10,6 +10,7 @@ const editContainer = document.getElementById("edit-container");
 const titleInput = document.getElementById("title-input");
 const saveButton = document.getElementById("save-button");
 const deleteButton = document.getElementById("delete-button");
+const iframe = document.getElementById("iframe");
 
 editContainer.style.display = "none";
 
@@ -31,13 +32,35 @@ sendButton.style.cursor = "pointer";
 let videoUserId = "";
 let userId = "";
 
+function getYouTubeId(url) {
+  var regExp = /^.*(?:youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=)([^#\&\?]*).*/;
+  var match = url.match(regExp);
+  if (match && match[1]) {
+    return match[1];
+  } else {
+    return null;
+  }
+}
+
 const getVideo = async () => {
   const xhr = new XMLHttpRequest();
 
   xhr.onload = () => {
     const data = JSON.parse(xhr.response);
     title.innerHTML = data?.title;
-    video.src = data?.url;
+
+    if (data?.youtubeUrl) {
+      video.style.display = "none";
+      iframe.src = `https://www.youtube.com/embed/${getYouTubeId(
+        data?.youtubeUrl
+      )}`;
+
+      iframe.style.width = "100%";
+      iframe.style.aspectRatio = "16 / 9"
+    } else {
+      iframe.style.display = "none";
+      video.src = data?.url;
+    }
 
     videoUserId = data?.userId;
 
