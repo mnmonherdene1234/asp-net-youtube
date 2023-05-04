@@ -11,10 +11,12 @@ namespace AspNetYoutube.Pages;
 public class VideosModel : PageModel
 {
     public DatabaseContext DatabaseContext { get; set; }
+    public IWebHostEnvironment WebHostEnvironment { get; set; }
 
-    public VideosModel(DatabaseContext databaseContext)
+    public VideosModel(DatabaseContext databaseContext, IWebHostEnvironment webHostEnvironment)
     {
         DatabaseContext = databaseContext;
+        WebHostEnvironment = webHostEnvironment;
     }
 
     public void OnGet() { }
@@ -50,6 +52,84 @@ public class VideosModel : PageModel
         }
 
         return new JsonResult(video);
+    }
+
+    public async Task<IActionResult> OnPostDelete(string id)
+    {
+        if (DatabaseContext.Videos == null)
+        {
+            return new JsonResult(new
+            {
+                message = "VIDEOS_NOT_FOUND"
+            });
+        }
+
+        var video = await DatabaseContext.Videos.FindAsync(Guid.Parse(id));
+
+        if (video != null)
+        {
+            DatabaseContext.Videos.Remove(video);
+
+            if (video.Url != null)
+            {
+                string filePath = Path.Join(WebHostEnvironment.ContentRootPath, "wwwroot", video.Url);
+                if (System.IO.File.Exists(filePath)) // Check if the file exists
+                {
+                    System.IO.File.Delete(filePath); // Delete the file
+                }
+
+            }
+        }
+
+
+        int result = await DatabaseContext.SaveChangesAsync();
+
+        if (result != 1)
+        {
+            return new JsonResult(new
+            {
+                message = "ERROR"
+            });
+        }
+
+        return new JsonResult(new
+        {
+            message = "OK"
+        });
+    }
+
+    public async Task<IActionResult> OnPostChangeTitle(string id, string title)
+    {
+        if (DatabaseContext.Videos == null)
+        {
+            return new JsonResult(new
+            {
+                message = "VIDEOS_NOT_FOUND"
+            });
+        }
+
+        var video = await DatabaseContext.Videos.FindAsync(Guid.Parse(id));
+
+        if (video != null)
+        {
+            video.Title = title;
+        }
+
+
+        int result = await DatabaseContext.SaveChangesAsync();
+
+        if (result != 1)
+        {
+            return new JsonResult(new
+            {
+                message = "ERROR"
+            });
+        }
+
+        return new JsonResult(new
+        {
+            message = "OK"
+        });
     }
 
     public async Task<IActionResult> OnGetComments()
@@ -92,7 +172,7 @@ public class VideosModel : PageModel
         return new JsonResult(comments ?? new List<Comment>());
     }
 
-    public async Task<IActionResult> OnGetUser()
+    public async Task<IActionResult> OnGetAuthor()
     {
         string id = Convert.ToString(Request.Query["id"]);
 
@@ -206,5 +286,30 @@ public class VideosModel : PageModel
         await DatabaseContext.SaveChangesAsync();
 
         return new JsonResult(newComment);
+    }
+
+    public async Task<IActionResult> OnGetUser()
+    {
+        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (userId == null)
+        {
+            return new JsonResult(new
+            {
+                message = "USER_VALUE_NOT_FOUND"
+            });
+        }
+
+        if (DatabaseContext.Users == null)
+        {
+            return new JsonResult(new
+            {
+                message = "USERS_NOT_FOUND"
+            });
+        }
+
+        var user = await DatabaseContext.Users.FindAsync(userId);
+
+        return new JsonResult(user);
     }
 }

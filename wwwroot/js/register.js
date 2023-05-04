@@ -12,12 +12,16 @@ form.addEventListener("submit", (event) => {
   xhr.onload = function () {
     const response = JSON.parse(this.response);
 
-    if(response?.message === "error"){
-        alert("Амжилтгүй боллоо");
-    }else{
-        window.location.replace("/");
+    if (response?.message === "error") {
+      Swal.fire({
+        icon: "error",
+        title: "Алдаа",
+        text: "Сайн нууц үг оруулна уу!",
+      });
+    } else {
+      window.location.replace("/");
     }
-  }
+  };
 
   xhr.open("POST", "/Register");
   xhr.send(formData);

@@ -6,6 +6,12 @@ const comments = document.getElementById("comments");
 const commentContainer = document.getElementById("comment-container");
 const comment = document.getElementById("comment");
 const sendButton = document.getElementById("send-button");
+const editContainer = document.getElementById("edit-container");
+const titleInput = document.getElementById("title-input");
+const saveButton = document.getElementById("save-button");
+const deleteButton = document.getElementById("delete-button");
+
+editContainer.style.display = "none";
 
 commentContainer.style.display = "flex";
 commentContainer.style.alignItems = "center";
@@ -22,13 +28,22 @@ sendButton.style.aspectRatio = "1 / 1";
 sendButton.style.borderRadius = "0 5px 5px 0";
 sendButton.style.cursor = "pointer";
 
-const getVideo = () => {
+let videoUserId = "";
+let userId = "";
+
+const getVideo = async () => {
   const xhr = new XMLHttpRequest();
 
   xhr.onload = () => {
     const data = JSON.parse(xhr.response);
     title.innerHTML = data?.title;
     video.src = data?.url;
+
+    videoUserId = data?.userId;
+
+    if (videoUserId === userId) {
+      editContainer.style.display = "block";
+    }
   };
 
   xhr.open("GET", `/Videos?handler=Video&id=${id}`);
@@ -46,7 +61,7 @@ const commentCard = (username, message) => {
   return container;
 };
 
-const getComments = () => {
+const getComments = async () => {
   const xhr = new XMLHttpRequest();
 
   xhr.onload = () => {
@@ -66,16 +81,33 @@ const getComments = () => {
 
 getComments();
 
-const getUser = () => {
+const getAuther = async () => {
   const xhr = new XMLHttpRequest();
 
   xhr.onload = () => {
     const data = JSON.parse(xhr.response);
-    console.log(data);
     username.innerHTML = data?.userName;
   };
 
-  xhr.open("GET", `/Videos?handler=User&id=${id}`);
+  xhr.open("GET", `/Videos?handler=Author&id=${id}`);
+  xhr.send();
+};
+
+getAuther();
+
+const getUser = async () => {
+  const xhr = new XMLHttpRequest();
+
+  xhr.onload = () => {
+    const data = JSON.parse(xhr.response);
+    userId = data?.id;
+
+    if (userId === videoUserId) {
+      editContainer.style.display = "block";
+    }
+  };
+
+  xhr.open("GET", `/Videos?handler=User`);
   xhr.send();
 };
 
@@ -100,3 +132,62 @@ const sendComment = () => {
 };
 
 sendButton.addEventListener("click", sendComment);
+
+deleteButton.addEventListener("click", () => {
+  Swal.fire({
+    title: "Устгах даа итгэлтэй байна уу?",
+    showDenyButton: true,
+    showCancelButton: true,
+    confirmButtonText: "Устгах",
+    denyButtonText: `Үгүй`,
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const xhr = new XMLHttpRequest();
+
+      xhr.onload = () => {
+        location.href = "/";
+      };
+
+      xhr.open("POST", "/Videos?handler=Delete");
+
+      const formData = new FormData();
+      formData.append("id", id);
+
+      xhr.send(formData);
+    }
+  });
+});
+
+saveButton.addEventListener("click", () => {
+  const xhr = new XMLHttpRequest();
+
+  xhr.onload = () => {
+    const data = JSON.parse(xhr.response);
+
+    if (data?.message === "OK") {
+      Swal.fire({
+        icon: "success",
+        title: "Амжилттай",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+
+      title.innerHTML = titleInput.value;
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Амжилтгүй",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }
+  };
+
+  xhr.open("POST", "/Videos?handler=ChangeTitle");
+
+  const formData = new FormData();
+  formData.append("id", id);
+  formData.append("title", titleInput.value);
+
+  xhr.send(formData);
+});
