@@ -31,18 +31,30 @@ const videoCard = (id, title, url, youtubeUrl) => {
   container.style.overflow = "hidden";
   container.style.textDecoration = "none";
 
+  if (window.innerWidth < 767) {
+    container.style.width = "100%";
+  }
+
   if (youtubeUrl) {
     const iframe = document.createElement("iframe");
     iframe.src = `https://www.youtube.com/embed/${getYouTubeId(youtubeUrl)}`;
-    iframe.width = "200";
-    iframe.height = "112";
     iframe.frameBorder = 0;
+
+    if (window.innerWidth < 767) {
+      iframe.style.width = "100%";
+      iframe.style.aspectRatio = "16 / 9"
+    }
     container.append(iframe);
   } else {
     const video = document.createElement("video");
     video.src = url;
     video.style.width = "200px";
     container.append(video);
+
+    if (window.innerWidth < 767) {
+      video.style.width = "100%";
+      video.style.aspectRatio = "16 / 9"
+    }
   }
 
   const pTitle = document.createElement("p");

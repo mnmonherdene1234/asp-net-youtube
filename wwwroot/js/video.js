@@ -12,7 +12,20 @@ const saveButton = document.getElementById("save-button");
 const deleteButton = document.getElementById("delete-button");
 const iframe = document.getElementById("iframe");
 
+video.style.maxWidth = "100%";
+
 editContainer.style.display = "none";
+
+titleInput.style.borderRadius = "999px";
+titleInput.style.border = "1px solid gray";
+titleInput.style.padding = "3px 1rem";
+titleInput.style.maxWidth = "150px";
+
+saveButton.style.borderRadius = "999px";
+saveButton.style.border = "none";
+
+deleteButton.style.borderRadius = "999px";
+deleteButton.style.border = "none";
 
 commentContainer.style.display = "flex";
 commentContainer.style.alignItems = "center";
@@ -48,6 +61,7 @@ const getVideo = async () => {
   xhr.onload = () => {
     const data = JSON.parse(xhr.response);
     title.innerHTML = data?.title;
+    titleInput.value = data?.title;
 
     if (data?.youtubeUrl) {
       video.style.display = "none";
@@ -56,7 +70,7 @@ const getVideo = async () => {
       )}`;
 
       iframe.style.width = "100%";
-      iframe.style.aspectRatio = "16 / 9"
+      iframe.style.aspectRatio = "16 / 9";
     } else {
       iframe.style.display = "none";
       video.src = data?.url;

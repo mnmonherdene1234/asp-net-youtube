@@ -66,18 +66,21 @@ h1 {
   border-radius: 999px;
 }
 
-.search-box{
+.search-box {
   padding: 0.3rem 1rem;
   border-radius: 100px;
   border: solid rgba(0, 0, 0, 0.226) 0.5px;
 }
 
-.search-container{
+.search-container {
   width: fit-content;
 }
 
 @media (max-width: 768px) {
   #user-email {
     display: none;
+  }
+
+  .search-box {
   }
 }
